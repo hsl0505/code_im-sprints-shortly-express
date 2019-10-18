@@ -8,8 +8,16 @@
   },
   "scripts": {
     "client": "cd client && npm start",
-    "server": "cd server && npm start",
-    "start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+    "cd-client" : "cd client",
+    "run-client" : "npm run client",
+    "start-client" : "npm-run-all cd-client run-client",
+    "cd-server" : "cd server",
+    "run-server" : "npm run server",
+    "start-server" : "npm-run-all cd-server run-server",
+    "npm-start" : "npm start",
+    "kill" : "concurrently --kill-others",
+    "start" : "npm-run-all -s start-client start-server",
+    "old-start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
     "lint": "./node_modules/.bin/eslint ./"
   },
   "lint-staged": {
@@ -20,11 +28,10 @@
       ]
     }
   },
-  "dependencies": {
-    "colors": "^1.3.3"
-  },
   "devDependencies": {
-    "concurrently": "^4.1.0"
+    "colors": "^1.4.0",
+    "concurrently": "^4.1.0",
+    "npm-run-all": "^4.1.5"
   },
   "babel": {
     "presets": [
