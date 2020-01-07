@@ -1,5 +1,6 @@
 const { users } = require('../../models');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   post: (req, res) => {
@@ -7,7 +8,7 @@ module.exports = {
     // console.log('로그인전', req.session); // 세션에 아직 세션데이터 안담김, 쿠키에 아직 세션아이디 안담김
     // console.log(req.cookies); // 아직 쿠키에 세션아이디 안담김
     // console.log(req.sessionID); // 세션 아이디는 만들어짐
-    let sess = req.session;
+    // let sess = req.session;
     let pw = req.body.password;
     users
       .findAll({
@@ -24,9 +25,15 @@ module.exports = {
             'sha512'
           );
           if (salt + target.toString('base64') === data[0].password) {
-            sess.userId = data[0].id;
+            let token = jwt.sign({ userId: data[0].id }, 'secret', {
+              expiresIn: '5m'
+            });
+            // sess.userId = data[0].id;
             // console.log('로그인후', req.session); // 세션 데이터 담음, 이 밑에 응답줄때 쿠키에 세션아이디 담을꺼임
-            res.status(200).json({ id: data[0].id });
+            res
+              .status(200)
+              .cookie('user', token)
+              .json({ id: data[0].id });
           } else {
             res.status(404).send('unvalid user');
           }
