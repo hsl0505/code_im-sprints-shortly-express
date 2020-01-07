@@ -39,8 +39,12 @@ app.use(
 
 // TODO : GET / 요청에 대한 응답을 작성해주세요. (api 구현을 가볍게 시작해보세요.)
 // app. ...
+app.get('/', (req, res) => {
+  res.status(200).send('Success');
+});
 
 app.get('/D*', (req, res) => {
+  // console.log(req.params);
   urls
     .findOne({
       where: {
@@ -68,7 +72,7 @@ app.use('/links', linksRouter);
 
 app.set('port', port);
 app.listen(app.get('port'), () => {
-  //console.log(`app is listening in PORT ${app.get('port')}`);
+  console.log(`app is listening in PORT ${app.get('port')}`);
 });
 
 module.exports = app;
