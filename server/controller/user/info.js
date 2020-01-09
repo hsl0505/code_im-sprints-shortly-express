@@ -17,9 +17,13 @@ module.exports = {
     // console.log('token', token);
     if (token) {
       let decoded = jwt.verify(token, 'secret');
-      users
-        .findAll({ where: { id: decoded.userId } })
-        .then(data => res.status(200).json(data[0]));
+      if (decoded) {
+        users
+          .findAll({ where: { id: decoded.userId } })
+          .then(data => res.status(200).json(data[0]));
+      } else {
+        res.status(401).send('need user session');
+      }
     } else {
       res.status(401).send('need user session');
     }
